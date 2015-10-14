@@ -1,31 +1,29 @@
 __author__ = 'antonio'
 
 # Problema de la mochila resuelto por programacion dinamica (iterativa)
-def ks(villains, weight):
-    mem = [[0 for j in xrange(weight + 1)]
-           for i in xrange(len(villains) + 1)]
+def ks(villains, time, cost_distance_1000 ):
+    mem = [[0 for _ in xrange(time + 1)]
+           for _ in xrange(len(villains) + 1)]
 
-    grab = [[0 for j in xrange(weight + 1)]
-           for i in xrange(len(villains) + 1)]
+    grab = [[0 for _ in xrange(time + 1)]
+            for _ in xrange(len(villains) + 1)]
 
-    for i, item in enumerate(villains, start=1):
-        for j in xrange(1, weight + 1):
-            if item.weight <= j:
-                if item.value + mem[i][j - item.weight] >= mem[i - 1][j]:
-                    mem[i][j] = item.value + mem[i][j - item.weight]
+    for i, villain in enumerate(villains, start=1):
+        for j in xrange(1, time + 1):
+            if villain.life <= j:
+                if (villain.reward - cost_distance_1000 * (villain.distance/1000)) + mem[i][j - villain.life] >= mem[i - 1][j]:
+                    mem[i][j] = (villain.reward - cost_distance_1000 * (villain.distance/1000)) + mem[i][j - villain.life]
                     grab[i][j] = 1
                 else:
                     mem[i][j] = mem[i - 1][j]
             else:
                 mem[i][j] = mem[i - 1][j]
 
-    itemList = []
+    result = []
     n = len(villains)
-    while n > 0 and weight >= 0:
-        if grab[n][weight]:
-            itemList.append(villains[n-1])
-            weight -= villains[n-1].weight
+    while n > 0 and time >= 0:
+        if grab[n][time]:
+            result.append(villains[n - 1])
+            time -= villains[n - 1].life
         n -= 1
-    return itemList
-
-print ks(items, 15)
+    return result

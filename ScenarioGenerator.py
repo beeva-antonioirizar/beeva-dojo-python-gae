@@ -13,6 +13,7 @@ class ScenarioGenerator:
         villains = []
         self.sneaks = []
         self.villains_to_kill = []
+        self.reward = None
 
         # generate villains
         for i in xrange(randint(5, 15)):
@@ -39,12 +40,14 @@ class ScenarioGenerator:
                     villains.append(villain)
 
         time = 7 * 24
-        self.villains_to_kill = ks(villains, time, self._cost_distance_1000)
+        self.villains_to_kill, self.reward= ks(villains, time, self._cost_distance_1000)
 
 import pprint
 a = ScenarioGenerator()
 a.calculate_schedule()
 print a.sneaks
+print a._cost_distance_1000
 for i in a.villains_to_kill:
 
     print(i)
+print a.reward
